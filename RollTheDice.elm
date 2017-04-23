@@ -12,12 +12,14 @@ import Svg.Attributes exposing (..)
 
 
 type alias Model =
-    { dieFaces : List Int }
+    { dieCount : Int
+    , dieFaces : List Int
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model [ 6, 4 ], Cmd.none )
+    ( Model 5 [ 1, 2, 3, 4, 5 ], Cmd.none )
 
 
 
@@ -33,7 +35,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Roll ->
-            ( model, Random.generate NewFaces (Random.list 2 (Random.int 1 6)) )
+            ( model, Random.generate NewFaces (Random.list model.dieCount (Random.int 1 6)) )
 
         NewFaces dieFaces ->
             ( { model | dieFaces = dieFaces }, Cmd.none )
@@ -137,7 +139,7 @@ view : Model -> Html.Html Msg
 view model =
     div
         [ Html.Attributes.style
-            [ ( "width", "30rem" )
+            [ ( "width", "20rem" )
             , ( "margin", "2rem auto" )
             , ( "font-family", "sans-serif" )
             ]
