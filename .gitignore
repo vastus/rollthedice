@@ -1,0 +1,7 @@
+# dirs
+elm-stuff/
+
+# files
+elm.js
+*.swp
+*~
