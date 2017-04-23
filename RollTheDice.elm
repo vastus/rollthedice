@@ -1,4 +1,4 @@
-module RollTheDice exposing (..)
+module RollTheDice exposing (Model, Msg, init, update, view, subscriptions)
 
 import Html exposing (button, div, h1, text)
 import Html.Attributes
@@ -156,13 +156,3 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
-
-
-main : Program Never Model Msg
-main =
-    Html.program
-        { init = init
-        , update = update
-        , view = view
-        , subscriptions = subscriptions
-        }
