@@ -43,21 +43,22 @@ update msg model =
 -- VIEW
 
 
+pipView : ( Int, Int ) -> Html.Html Msg
+pipView ( x, y ) =
+    Svg.circle
+        [ cx (toString x)
+        , cy (toString y)
+        , r (toString 8)
+        , fill "#2e2e2e"
+        , stroke "#3e3e3e"
+        , strokeWidth "2"
+        ]
+        []
+
+
 viewDieFace : Int -> Int -> Html.Html Msg
 viewDieFace a dieFace =
     let
-        pip : ( Int, Int ) -> Html.Html Msg
-        pip ( x, y ) =
-            Svg.circle
-                [ cx (toString x)
-                , cy (toString y)
-                , r (toString 8)
-                , fill "#2e2e2e"
-                , stroke "#3e3e3e"
-                , strokeWidth "2"
-                ]
-                []
-
         position : Int -> Int -> Int -> ( Int, Int )
         position a col row =
             ( a * (col + 1) // 4, a * (row + 1) // 4 )
@@ -107,7 +108,7 @@ viewDieFace a dieFace =
                     , pos 2 2
                     ]
     in
-        Svg.g [] (List.map pip (pipPositions dieFace))
+        Svg.g [] (List.map pipView (pipPositions dieFace))
 
 
 viewDie : Int -> Int -> Html.Html Msg
