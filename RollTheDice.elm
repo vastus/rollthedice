@@ -4,7 +4,7 @@ import Html exposing (button, div, h1, text)
 import Html.Attributes
 import Html.Events exposing (onClick)
 import Random
-import Svg exposing (..)
+import Svg
 import Svg.Attributes exposing (..)
 
 
@@ -12,14 +12,13 @@ import Svg.Attributes exposing (..)
 
 
 type alias Model =
-    { dieCount : Int
-    , dieFaces : List Int
+    { dieFaces : List Int
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model 5 [ 1, 2, 3, 4, 5 ], Cmd.none )
+    ( Model [ 1, 2, 3, 4, 5 ], Cmd.none )
 
 
 
@@ -29,16 +28,43 @@ init =
 type Msg
     = Roll
     | NewFaces (List Int)
+    | DecrementDice
+    | ResetDieCount
+    | IncrementDice
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        Roll ->
-            ( model, Random.generate NewFaces (Random.list model.dieCount (Random.int 1 6)) )
+    let
+        dieCount =
+            List.length model.dieFaces
+    in
+        case msg of
+            Roll ->
+                ( model, Random.generate NewFaces (Random.list dieCount (Random.int 1 6)) )
 
-        NewFaces dieFaces ->
-            ( { model | dieFaces = dieFaces }, Cmd.none )
+            NewFaces dieFaces ->
+                ( { model | dieFaces = dieFaces }, Cmd.none )
+
+            DecrementDice ->
+                if dieCount - 1 > 0 then
+                    ( { model
+                        | dieFaces =
+                            Maybe.withDefault [ 1, 3, 3, 7 ] (List.tail model.dieFaces)
+                      }
+                    , Cmd.none
+                    )
+                else
+                    ( model, Cmd.none )
+
+            ResetDieCount ->
+                ( { model | dieFaces = [ 1, 2, 3, 4, 5 ] }, Cmd.none )
+
+            IncrementDice ->
+                if dieCount + 1 <= 42 then
+                    ( { model | dieFaces = 1 :: model.dieFaces }, Cmd.none )
+                else
+                    ( model, Cmd.none )
 
 
 
@@ -121,7 +147,7 @@ viewDie a dieFace =
         , viewBox "0 0 100 100"
         , onClick Roll
         ]
-        [ rect
+        [ Svg.rect
             [ x "0"
             , y "0"
             , width (toString a)
@@ -147,6 +173,26 @@ view model =
         [ h1
             [ Html.Attributes.style [ ( "user-select", "none" ) ] ]
             [ Html.text "Roll the dice" ]
+        , Html.div
+            -- controls
+            [ Html.Attributes.style
+                [ ( "margin-bottom", ".5rem" ) ]
+            ]
+            [ button
+                [ Html.Attributes.style [ ( "margin-right", ".5rem" ) ]
+                , onClick DecrementDice
+                ]
+                [ text "Less" ]
+            , button
+                [ Html.Attributes.style [ ( "margin-right", ".5rem" ) ]
+                , onClick ResetDieCount
+                ]
+                [ text "Just 5" ]
+            , button
+                [ onClick IncrementDice
+                ]
+                [ text "More" ]
+            ]
         , div [] (List.map (viewDie 80) model.dieFaces)
         ]
 
