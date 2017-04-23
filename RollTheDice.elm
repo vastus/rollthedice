@@ -43,8 +43,8 @@ update msg model =
 -- VIEW
 
 
-viewDieDots : Int -> Int -> Int -> Html.Html Msg
-viewDieDots w h dieFace =
+viewDieFace : Int -> Int -> Html.Html Msg
+viewDieFace a dieFace =
     let
         dot : ( Int, Int ) -> Html.Html Msg
         dot ( x, y ) =
@@ -58,56 +58,52 @@ viewDieDots w h dieFace =
                 ]
                 []
 
-        ratio : Int -> Int
-        ratio a =
-            a * 1 // 3
-
-        dotPositions : Int -> List ( Int, Int )
-        dotPositions dieFace =
+        pipPositions : Int -> List ( Int, Int )
+        pipPositions dieFace =
             case dieFace of
                 1 ->
-                    [ ( w // 2, h // 2 ) ]
+                    [ ( a // 2, a // 2 ) ]
 
                 2 ->
-                    [ ( w * 1 // 4, h * 3 // 4 )
-                    , ( w * 3 // 4, h * 1 // 4 )
+                    [ ( a * 1 // 4, a * 3 // 4 )
+                    , ( a * 3 // 4, a * 1 // 4 )
                     ]
 
                 3 ->
-                    [ ( w * 1 // 4, h * 3 // 4 )
-                    , ( w * 3 // 4, h * 1 // 4 )
-                    , ( w // 2, h // 2 )
+                    [ ( a * 1 // 4, a * 3 // 4 )
+                    , ( a * 3 // 4, a * 1 // 4 )
+                    , ( a // 2, a // 2 )
                     ]
 
                 4 ->
-                    [ ( w * 1 // 4, h * 3 // 4 )
-                    , ( w * 3 // 4, h * 1 // 4 )
-                    , ( w * 1 // 4, h * 1 // 4 )
-                    , ( w * 3 // 4, h * 3 // 4 )
+                    [ ( a * 1 // 4, a * 3 // 4 )
+                    , ( a * 3 // 4, a * 1 // 4 )
+                    , ( a * 1 // 4, a * 1 // 4 )
+                    , ( a * 3 // 4, a * 3 // 4 )
                     ]
 
                 5 ->
-                    [ ( w * 1 // 4, h * 3 // 4 )
-                    , ( w * 3 // 4, h * 1 // 4 )
-                    , ( w * 1 // 4, h * 1 // 4 )
-                    , ( w * 3 // 4, h * 3 // 4 )
-                    , ( w // 2, h // 2 )
+                    [ ( a * 1 // 4, a * 3 // 4 )
+                    , ( a * 3 // 4, a * 1 // 4 )
+                    , ( a * 1 // 4, a * 1 // 4 )
+                    , ( a * 3 // 4, a * 3 // 4 )
+                    , ( a // 2, a // 2 )
                     ]
 
                 _ ->
-                    [ ( w * 1 // 4, h * 1 // 4 )
-                    , ( w * 1 // 4, h * 2 // 4 )
-                    , ( w * 1 // 4, h * 3 // 4 )
-                    , ( w * 3 // 4, h * 1 // 4 )
-                    , ( w * 3 // 4, h * 2 // 4 )
-                    , ( w * 3 // 4, h * 3 // 4 )
+                    [ ( a * 1 // 4, a * 1 // 4 )
+                    , ( a * 1 // 4, a * 2 // 4 )
+                    , ( a * 1 // 4, a * 3 // 4 )
+                    , ( a * 3 // 4, a * 1 // 4 )
+                    , ( a * 3 // 4, a * 2 // 4 )
+                    , ( a * 3 // 4, a * 3 // 4 )
                     ]
     in
-        Svg.g [] (List.map dot (dotPositions dieFace))
+        Svg.g [] (List.map dot (pipPositions dieFace))
 
 
-viewDie : Int -> Int -> Int -> Html.Html Msg
-viewDie w h dieFace =
+viewDie : Int -> Int -> Html.Html Msg
+viewDie a dieFace =
     Svg.svg
         [ width "100"
         , height "100"
@@ -118,35 +114,31 @@ viewDie w h dieFace =
         [ rect
             [ x "0"
             , y "0"
-            , width (toString w)
-            , height (toString h)
+            , width (toString a)
+            , height (toString a)
             , rx "15"
             , ry "15"
             , fill "#fea"
             ]
             []
-        , viewDieDots w h dieFace
+        , viewDieFace a dieFace
         ]
 
 
 view : Model -> Html.Html Msg
 view model =
-    let
-        die =
-            viewDie 80 80
-    in
-        div
-            [ Html.Attributes.style
-                [ ( "width", "30rem" )
-                , ( "margin", "2rem auto" )
-                , ( "font-family", "sans-serif" )
-                ]
+    div
+        [ Html.Attributes.style
+            [ ( "width", "30rem" )
+            , ( "margin", "2rem auto" )
+            , ( "font-family", "sans-serif" )
             ]
-            [ h1
-                [ Html.Attributes.style [ ( "user-select", "none" ) ] ]
-                [ Html.text "Roll the dice" ]
-            , div [] (List.map die model.dieFaces)
-            ]
+        ]
+        [ h1
+            [ Html.Attributes.style [ ( "user-select", "none" ) ] ]
+            [ Html.text "Roll the dice" ]
+        , div [] (List.map (viewDie 80) model.dieFaces)
+        ]
 
 
 
