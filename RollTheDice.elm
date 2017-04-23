@@ -58,48 +58,56 @@ viewDieFace a dieFace =
                 ]
                 []
 
+        position : Int -> Int -> Int -> ( Int, Int )
+        position a col row =
+            ( a * (col + 1) // 4, a * (row + 1) // 4 )
+
+        pos : Int -> Int -> ( Int, Int )
+        pos =
+            position a
+
         pipPositions : Int -> List ( Int, Int )
         pipPositions dieFace =
             case dieFace of
                 1 ->
-                    [ ( a // 2, a // 2 ) ]
+                    [ pos 1 1 ]
 
                 2 ->
-                    [ ( a * 1 // 4, a * 3 // 4 )
-                    , ( a * 3 // 4, a * 1 // 4 )
+                    [ pos 0 2
+                    , pos 2 0
                     ]
 
                 3 ->
-                    [ ( a * 1 // 4, a * 3 // 4 )
-                    , ( a * 3 // 4, a * 1 // 4 )
-                    , ( a // 2, a // 2 )
+                    [ pos 0 2
+                    , pos 1 1
+                    , pos 2 0
                     ]
 
                 4 ->
-                    [ ( a * 1 // 4, a * 3 // 4 )
-                    , ( a * 3 // 4, a * 1 // 4 )
-                    , ( a * 1 // 4, a * 1 // 4 )
-                    , ( a * 3 // 4, a * 3 // 4 )
+                    [ pos 0 0
+                    , pos 0 2
+                    , pos 2 0
+                    , pos 2 2
                     ]
 
                 5 ->
-                    [ ( a * 1 // 4, a * 3 // 4 )
-                    , ( a * 3 // 4, a * 1 // 4 )
-                    , ( a * 1 // 4, a * 1 // 4 )
-                    , ( a * 3 // 4, a * 3 // 4 )
-                    , ( a // 2, a // 2 )
+                    [ pos 0 0
+                    , pos 2 0
+                    , pos 1 1
+                    , pos 0 2
+                    , pos 2 2
                     ]
 
                 _ ->
-                    [ ( a * 1 // 4, a * 1 // 4 )
-                    , ( a * 1 // 4, a * 2 // 4 )
-                    , ( a * 1 // 4, a * 3 // 4 )
-                    , ( a * 3 // 4, a * 1 // 4 )
-                    , ( a * 3 // 4, a * 2 // 4 )
-                    , ( a * 3 // 4, a * 3 // 4 )
+                    [ pos 0 0
+                    , pos 0 1
+                    , pos 0 2
+                    , pos 2 0
+                    , pos 2 1
+                    , pos 2 2
                     ]
     in
-        Svg.g [] (List.map dot (pipPositions dieFace))
+        Svg.g [] (List.map pip (pipPositions dieFace))
 
 
 viewDie : Int -> Int -> Html.Html Msg
