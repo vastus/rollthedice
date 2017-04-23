@@ -46,8 +46,8 @@ update msg model =
 viewDieFace : Int -> Int -> Html.Html Msg
 viewDieFace a dieFace =
     let
-        dot : ( Int, Int ) -> Html.Html Msg
-        dot ( x, y ) =
+        pip : ( Int, Int ) -> Html.Html Msg
+        pip ( x, y ) =
             Svg.circle
                 [ cx (toString x)
                 , cy (toString y)
